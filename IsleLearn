@@ -1,0 +1,55 @@
+// Caribbean Study App - Starter Template with Login, Home, AI Notes, and Game Mode
+
+import React, { useState } from 'react'; import { View, Text, TextInput, Button } from 'react-native'; import { NavigationContainer } from '@react-navigation/native'; import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+// Dummy Authentication const LoginScreen = ({ navigation }) => { const [email, setEmail] = useState(''); const [password, setPassword] = useState('');
+
+const handleLogin = () => { // Replace with Firebase auth if (email && password) { navigation.navigate('Home'); } };
+
+return ( <View className="flex-1 items-center justify-center bg-white p-4"> <Text className="text-2xl font-bold mb-4">Login</Text> <TextInput
+placeholder="Email"
+value={email}
+onChangeText={setEmail}
+className="border p-2 w-full mb-2 rounded"
+/> <TextInput
+placeholder="Password"
+secureTextEntry
+value={password}
+onChangeText={setPassword}
+className="border p-2 w-full mb-4 rounded"
+/> <Button title="Login" onPress={handleLogin} /> </View> ); };
+
+const HomeScreen = ({ navigation }) => { return ( <View className="flex-1 items-center justify-center bg-white"> <Text className="text-xl font-semibold mb-4">Welcome to StudyApp</Text> <Button title="AI Notes" onPress={() => navigation.navigate('AINotes')} /> <View className="my-2" /> <Button title="Games" onPress={() => navigation.navigate('Game')} /> </View> ); };
+
+const AINotesScreen = () => { const [form, setForm] = useState(''); const [subject, setSubject] = useState(''); const [notes, setNotes] = useState('');
+
+const generateNotes = async () => { // This would call your backend/GPT to generate notes const mockNotes = Here are some notes for ${subject} (Form ${form}):\n- Key Concepts...\n- Definitions...\n- Example Questions...; setNotes(mockNotes); };
+
+return ( <View className="flex-1 p-4 bg-white"> <Text className="text-xl font-bold mb-2">AI Notes Generator</Text> <TextInput
+placeholder="Enter Form (e.g., 1, 2, 3)"
+value={form}
+onChangeText={setForm}
+className="border p-2 mb-2 rounded"
+/> <TextInput
+placeholder="Enter Subject (e.g., Math)"
+value={subject}
+onChangeText={setSubject}
+className="border p-2 mb-2 rounded"
+/> <Button title="Generate Notes" onPress={generateNotes} /> <Text className="mt-4 whitespace-pre-line">{notes}</Text> </View> ); };
+
+const GameScreen = () => { const [question, setQuestion] = useState('What is 6 + 7?'); const [answer, setAnswer] = useState(''); const [feedback, setFeedback] = useState('');
+
+const checkAnswer = () => { if (parseInt(answer) === 13) { setFeedback('✅ Correct!'); } else { setFeedback('❌ Try again.'); } };
+
+return ( <View className="flex-1 p-4 bg-white"> <Text className="text-xl font-bold mb-4">Math Quiz</Text> <Text className="text-lg mb-2">{question}</Text> <TextInput
+placeholder="Your Answer"
+keyboardType="numeric"
+value={answer}
+onChangeText={setAnswer}
+className="border p-2 mb-2 rounded"
+/> <Button title="Submit" onPress={checkAnswer} /> <Text className="mt-4 text-lg">{feedback}</Text> </View> ); };
+
+export default function App() { return ( <NavigationContainer> <Stack.Navigator initialRouteName="Login"> <Stack.Screen name="Login" component={LoginScreen} /> <Stack.Screen name="Home" component={HomeScreen} /> <Stack.Screen name="AINotes" component={AINotesScreen} options={{ title: 'AI Notes' }} /> <Stack.Screen name="Game" component={GameScreen} options={{ title: 'Math Game' }} /> </Stack.Navigator> </NavigationContainer> ); }
+
